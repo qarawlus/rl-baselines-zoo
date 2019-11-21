@@ -5,6 +5,7 @@ from collections import OrderedDict
 from pprint import pprint
 import warnings
 import importlib
+import rlsp
 
 # For pybullet envs
 warnings.filterwarnings("ignore")
