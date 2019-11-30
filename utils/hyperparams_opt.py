@@ -285,27 +285,26 @@ def sample_sac_params(trial):
     :param trial: (optuna.trial)
     :return: (dict)
     """
-    gamma = trial.suggest_categorical('gamma', [0.9, 0.95, 0.98, 0.99, 0.995, 0.999, 0.9999])
-    learning_rate = trial.suggest_loguniform('lr', 1e-5, 1)
-    batch_size = trial.suggest_categorical('batch_size', [16, 32, 64, 128, 256, 512])
-    buffer_size = trial.suggest_categorical('buffer_size', [int(1e4), int(1e5), int(1e6)])
-    learning_starts = trial.suggest_categorical('learning_starts', [0, 1000, 10000, 20000])
-    train_freq = trial.suggest_categorical('train_freq', [1, 10, 100, 300])
+    gamma = trial.suggest_categorical('gamma', [0.95, 0.99, 0.999])
+    # learning_rate = trial.suggest_loguniform('lr', 1e-5, 1)
+    learning_rate = trial.suggest_categorical('lr', [0.0001, 0.001, 0.01])
+    # batch_size = trial.suggest_categorical('batch_size', [64, 256])
+    # buffer_size = trial.suggest_categorical('buffer_size', [10000, 100000])
+    train_freq = trial.suggest_categorical('train_freq', [1, 10])
     # gradient_steps takes too much time
     # gradient_steps = trial.suggest_categorical('gradient_steps', [1, 100, 300])
     gradient_steps = train_freq
-    ent_coef = trial.suggest_categorical('ent_coef', ['auto', 0.5, 0.1, 0.05, 0.01, 0.0001])
+    ent_coef = trial.suggest_categorical('ent_coef', ['auto', 0.5, 0.01])
 
     target_entropy = 'auto'
     if ent_coef == 'auto':
-        target_entropy = trial.suggest_categorical('target_entropy', ['auto', -1, -10, -20, -50, -100])
+        target_entropy = trial.suggest_categorical('target_entropy', ['auto', -1, -100])
 
     return {
         'gamma': gamma,
         'learning_rate': learning_rate,
-        'batch_size': batch_size,
-        'buffer_size': buffer_size,
-        'learning_starts': learning_starts,
+        # 'batch_size': batch_size,
+        # 'buffer_size': buffer_size,
         'train_freq': train_freq,
         'gradient_steps': gradient_steps,
         'ent_coef': ent_coef,
